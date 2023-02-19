@@ -41,7 +41,7 @@ public class Users extends TimeStamped {
         return this;
     }
 
-//    public void changeRole(UserRoleEnum roleEnum) {
-//        this.role = roleEnum;
-//    }
+    public void changeRole(UserRoleEnum roleEnum) {
+        this.role = roleEnum;
+    }
 }

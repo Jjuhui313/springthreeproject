@@ -3,6 +3,7 @@ package com.sparta.springthreeproject.user.service;
 import com.sparta.springthreeproject.jwt.JwtUtil;
 import com.sparta.springthreeproject.user.dto.LoginRequestDto;
 import com.sparta.springthreeproject.user.dto.SignUpRequestDto;
+import com.sparta.springthreeproject.user.entity.UserRoleEnum;
 import com.sparta.springthreeproject.user.entity.Users;
 import com.sparta.springthreeproject.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -62,5 +63,11 @@ public class UserService {
 //        }
         return jwtUtil.createToken(preUser.getUserName());
 //        return response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(preUser.getUserName()));
+    }
+
+    @Transactional
+    public void grantAdminRole(Long id) {
+        Users users = userRepository.findById(id).orElseThrow();
+        users.changeRole(UserRoleEnum.ADMIN);
     }
 }
