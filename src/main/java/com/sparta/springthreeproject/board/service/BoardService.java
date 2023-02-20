@@ -3,7 +3,7 @@ package com.sparta.springthreeproject.board.service;
 import com.sparta.springthreeproject.board.dto.BoardRequestDto;
 import com.sparta.springthreeproject.board.dto.BoardResponseDto;
 import com.sparta.springthreeproject.board.entity.Board;
-import com.sparta.springthreeproject.board.entity.MessageDto;
+import com.sparta.springthreeproject.board.dto.MessageDto;
 import com.sparta.springthreeproject.board.repository.BoardRepository;
 import com.sparta.springthreeproject.comment.service.CommentService;
 import com.sparta.springthreeproject.exception.dto.ExcepMsg;
@@ -18,13 +18,18 @@ import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.OK;
 
+import static com.sparta.springthreeproject.exception.message.ExceptionMessage.*;
+
 @Service
 @RequiredArgsConstructor
 public class BoardService {
 
     private final BoardRepository boardRepository;
     private final CommentService commentService;
-//    private final CommentService commentService;
+
+    private boolean hasAuthority(Users users, Board board) {
+        return users.getId().equals(board.getCreateBy()) || users.getRole().equals(UserRoleEnum.ADMIN);
+    }
     public BoardResponseDto createBoard(BoardRequestDto requestDto, Users user) {
         Board board = new Board(requestDto, user);
         Board saveBoard = boardRepository.save(board);
@@ -38,10 +43,10 @@ public class BoardService {
 
     public BoardResponseDto findById(Long id) {
         Board entity = boardRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("해당 게시글은 존재하지 않습니다.")
+                () -> new IllegalArgumentException(BOARD_DOES_NOT_EXIEST.getMessage())
         );
         if (entity.getIsDeleted()) {
-            throw new IllegalArgumentException("해당 게시글은 삭제된 게시글입니다.");
+            throw new IllegalArgumentException(BOARD_HAS_BEEN_DELETED.getMessage());
         }
         return new BoardResponseDto(entity);
     }
@@ -49,29 +54,25 @@ public class BoardService {
     @Transactional
     public MessageDto update(Long id, BoardRequestDto requestDto, Users user) throws IllegalAccessException {
         Board board = boardRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 게시글입니다.")
+                () -> new IllegalArgumentException(BOARD_DOES_NOT_EXIEST.getMessage())
         );
         if(hasAuthority(user, board)) {
             board.update(requestDto);
             return new MessageDto(true, new BoardResponseDto(board));
         }
-        throw new IllegalAccessException("작성자만 삭제/수정할 수 있습니다.");
+        throw new IllegalAccessException(ILLEGAL_ACCESS_UPDATE_OR_DELETE.getMessage());
 
     }
 
     @Transactional
     public ExcepMsg deleteBoard(Long id, Users user) throws IllegalAccessException {
         Board board = boardRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 게시글입니다.")
+                () -> new IllegalArgumentException(BOARD_DOES_NOT_EXIEST.getMessage())
         );
         if (hasAuthority(user, board)) {
             board.delete(true);
             return new ExcepMsg("게시글 삭제 성공", OK.value());
         }
-        throw new IllegalAccessException("작성자만 삭제/수정할 수 있습니다.");
-    }
-
-    private boolean hasAuthority(Users users, Board board) {
-        return users.getUserName().equals(board.getUserName()) || users.getRole().equals(UserRoleEnum.ADMIN);
+        throw new IllegalAccessException(ILLEGAL_ACCESS_UPDATE_OR_DELETE.getMessage());
     }
 }

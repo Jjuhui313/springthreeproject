@@ -1,5 +1,6 @@
-package com.sparta.springthreeproject.comment.entity;
+package com.sparta.springthreeproject.comment.dto;
 
+import com.sparta.springthreeproject.comment.entity.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

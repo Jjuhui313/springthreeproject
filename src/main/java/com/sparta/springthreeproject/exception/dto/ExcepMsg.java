@@ -13,4 +13,5 @@ public class ExcepMsg {
         this.msg = msg;
         this.status = status;
     }
+
 }

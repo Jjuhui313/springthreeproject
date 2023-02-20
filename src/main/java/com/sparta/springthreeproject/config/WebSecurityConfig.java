@@ -2,10 +2,12 @@ package com.sparta.springthreeproject.config;
 
 import com.sparta.springthreeproject.jwt.JwtAuthFilter;
 import com.sparta.springthreeproject.jwt.JwtUtil;
+import com.sparta.springthreeproject.user.entity.Users;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.AuditorAware;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,6 +19,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.util.Optional;
+
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity // 스프링 Security 지원을 가능하게 함
@@ -24,6 +28,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfig {
 
     private final JwtUtil jwtUtil;
+//    private final Users users;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -54,11 +59,16 @@ public class WebSecurityConfig {
                 .and().addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
 
-        http.formLogin().loginPage("/api/user/login-page").permitAll();
+//        http.formLogin().loginPage("/api/user/login-page").permitAll();
 
 //        http.exceptionHandling().accessDeniedPage("/api/user/forbidden");
 
         return http.build();
     }
+
+//    @Bean
+//    public AuditorAware<String> auditorProvider() {
+//        return () -> Optional.of(users.getUserName());
+//    }
 
 }

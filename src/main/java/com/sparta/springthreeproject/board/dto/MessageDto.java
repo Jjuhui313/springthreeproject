@@ -1,4 +1,4 @@
-package com.sparta.springthreeproject.board.entity;
+package com.sparta.springthreeproject.board.dto;
 
 import lombok.Getter;
 
