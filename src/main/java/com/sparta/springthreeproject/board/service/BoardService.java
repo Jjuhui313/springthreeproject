@@ -28,7 +28,7 @@ public class BoardService {
     private final CommentService commentService;
 
     private boolean hasAuthority(Users users, Board board) {
-        return users.getId().equals(board.getCreateBy()) || users.getRole().equals(UserRoleEnum.ADMIN);
+        return users.getId().equals(board.getUser().getId()) || users.getRole().equals(UserRoleEnum.ADMIN);
     }
     public BoardResponseDto createBoard(BoardRequestDto requestDto, Users user) {
         Board board = new Board(requestDto, user);

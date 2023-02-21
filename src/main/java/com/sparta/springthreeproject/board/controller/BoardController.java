@@ -8,6 +8,7 @@ import com.sparta.springthreeproject.board.service.BoardService;
 import com.sparta.springthreeproject.comment.entity.Comment;
 import com.sparta.springthreeproject.comment.service.CommentService;
 import com.sparta.springthreeproject.exception.dto.ExcepMsg;
+import com.sparta.springthreeproject.jwt.JwtUtil;
 import com.sparta.springthreeproject.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -103,4 +104,21 @@ public class BoardController {
         msg = new ExcepMsg("좋아요 취소", OK.value());
         return new ResponseEntity<>(msg, OK);
     }
+//    @PostMapping("/board/{id}/like")
+//    public ResponseEntity<Object> insertLikeBoard(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+//        boardLikeService.insertLike(id, userDetails.getUser());
+//        ExcepMsg msg = new ExcepMsg("좋아요", OK.value());
+//        return new ResponseEntity<>(msg, OK);
+//    }
+//    @DeleteMapping("/board/{id}/like")
+//    public ResponseEntity<Object> deleteLikeBoard(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+//        boardLikeService.deleteLike(id, userDetails.getUser());
+//        ExcepMsg msg = new ExcepMsg("좋아요 취소", OK.value());
+//        return new ResponseEntity<>(msg, OK);
+//    }
+
+
+
+
+
 }

@@ -3,8 +3,8 @@ package com.sparta.springthreeproject.board.entity;
 import com.sparta.springthreeproject.board.dto.BoardRequestDto;
 import com.sparta.springthreeproject.comment.entity.Comment;
 import com.sparta.springthreeproject.user.entity.Users;
-import com.sparta.springthreeproject.util.BasicEntity;
-//import com.sparta.springthreeproject.util.TimeStamped;
+import com.sparta.springthreeproject.util.TimeStamped;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,8 +14,8 @@ import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor
-public class Board extends BasicEntity {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Board extends TimeStamped {
     @Id @Column(name = "BOARD_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

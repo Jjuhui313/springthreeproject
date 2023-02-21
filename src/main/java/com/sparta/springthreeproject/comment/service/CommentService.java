@@ -30,7 +30,7 @@ public class CommentService {
     private final BoardRepository boardRepository;
 
     private boolean hasAuthority(Users users, Comment comment) {
-        return comment.getCreateBy().equals(users.getId()) || users.getRole().equals(UserRoleEnum.ADMIN);
+        return comment.getUserName().equals(users.getUserName()) || users.getRole().equals(UserRoleEnum.ADMIN);
     }
 
     public CommentResponseDto createComment(Long bId, CommentRequestDto requestDto, Users user) {

@@ -23,13 +23,13 @@ public class CommentLikeService {
 
     @Transactional
     public boolean commentLike(Long cId, Users user) {
-        Optional<CommentLike> commentLike = commentLikeRepository.findByComment_IdAndCreateBy(cId, user.getId());
+        Optional<CommentLike> commentLike = commentLikeRepository.findByComment_IdAndUsers_id(cId, user.getId());
 
         if(commentLike.isEmpty()) {
             Comment comment = commentRepository.findById(cId).orElseThrow(
                     () -> new IllegalArgumentException(COMMENT_DOES_NOT_EXIEST.getMessage())
             );
-            commentLikeRepository.save(new CommentLike(comment));
+            commentLikeRepository.save(new CommentLike(comment, user));
             return true;
         }
         CommentLike like = commentLike.get();

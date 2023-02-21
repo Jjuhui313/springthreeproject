@@ -2,6 +2,7 @@ package com.sparta.springthreeproject.user.entity;
 
 import com.sparta.springthreeproject.user.dto.SignUpRequestDto;
 import com.sparta.springthreeproject.util.TimeStamped;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,7 +14,7 @@ import static com.sparta.springthreeproject.user.entity.UserRoleEnum.USER;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Validated
 public class Users extends TimeStamped {
     @Id

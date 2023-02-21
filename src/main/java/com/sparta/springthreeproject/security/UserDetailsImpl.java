@@ -20,7 +20,7 @@ public class UserDetailsImpl implements UserDetails {
     }
 
     public Users getUser() {
-        return user;
+        return this.user;
     }
 
     @Override

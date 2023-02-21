@@ -2,16 +2,18 @@ package com.sparta.springthreeproject.board.entity;
 
 
 
-import com.sparta.springthreeproject.util.BasicEntity;
+import com.sparta.springthreeproject.user.entity.Users;
+import com.sparta.springthreeproject.util.TimeStamped;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 
 @Entity
 @Getter
-@NoArgsConstructor
-public class BoardLike extends BasicEntity {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class BoardLike extends TimeStamped {
 
     @Id
     @Column(name = "COMMENTLIKES_ID")
@@ -23,10 +25,21 @@ public class BoardLike extends BasicEntity {
     @JoinColumn(name = "COMMENT_ID")
     private Board board;
 
-    public BoardLike(Board board) {
+    @ManyToOne
+    @JoinColumn(name = "USER_ID")
+    private Users users;
+
+    public BoardLike(Board board, Users users) {
         this.isLiked = true;
         this.board = board;
+        this.users = users;
         this.board.like();
+    }
+
+    @Builder
+    public BoardLike(Users users, Board board) {
+        this.users = users;
+        this.board = board;
     }
 
     public boolean likeLike() {
