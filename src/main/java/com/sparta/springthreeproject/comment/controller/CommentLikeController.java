@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class CommentLikeController {
 
-    CommentLikeService commentLikeService;
+    private final CommentLikeService commentLikeService;
 
-    @PostMapping("/board/{b-id}/comment/{c-id}/like")
+    @PostMapping("comment/{c-id}/like")
     public CommentLikeDto pressCommentLike(@PathVariable(name = "c-id") Long cId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return commentLikeService.commentLike(cId, userDetails.getUser());
     }

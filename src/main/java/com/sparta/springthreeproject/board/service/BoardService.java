@@ -6,6 +6,7 @@ import com.sparta.springthreeproject.board.entity.Board;
 import com.sparta.springthreeproject.board.dto.MessageDto;
 import com.sparta.springthreeproject.board.repository.BoardLikeRepository;
 import com.sparta.springthreeproject.board.repository.BoardRepository;
+import com.sparta.springthreeproject.comment.dto.CommentResponseDto;
 import com.sparta.springthreeproject.comment.entity.Comment;
 import com.sparta.springthreeproject.comment.service.CommentService;
 import com.sparta.springthreeproject.exception.dto.ExcepMsg;
@@ -43,7 +44,7 @@ public class BoardService {
     public BoardResponseDto createBoard(BoardRequestDto requestDto, Users user) {
         Board board = new Board(requestDto, user);
         Board saveBoard = boardRepository.save(board);
-        return new BoardResponseDto(saveBoard);
+        return new BoardResponseDto(saveBoard,saveBoard.getComment());
     }
 
     public List<BoardResponseDto> getPosts() {
@@ -53,12 +54,23 @@ public class BoardService {
         for(Board board : boards) {
             Long likeTotal = boardLikeRepository.countAllByBoard_Id(board.getId());
             List<Comment> comments = commentService.getComment(board.getId());
+            List<CommentResponseDto> commentResponseDtos = new ArrayList<>();
+            for(Comment comment : comments) {
+                CommentResponseDto commentResponseDto = CommentResponseDto.builder()
+                        .content(comment.getContent())
+                        .userName(comment.getUserName())
+                        .createAt(comment.getCreateAt())
+                        .modifiedAt(comment.getModifiedAt())
+                        .totalLike(comment.getTotalLike())
+                        .build();
+                commentResponseDtos.add(commentResponseDto);
+            }
             BoardResponseDto boardResponseDto = BoardResponseDto.builder()
                     .title(board.getTitle())
                     .userName(board.getUserName())
                     .content(board.getContent())
                     .totalLike(likeTotal)
-                    .comment(comments)
+                    .comment(commentResponseDtos)
                     .createdAt(board.getCreateAt())
                     .modifiedAt(board.getModifiedAt())
                     .build();
@@ -96,7 +108,7 @@ public class BoardService {
                 .totalLike(likeTotal)
                 .createdAt(entity.getCreateAt())
                 .modifiedAt(entity.getModifiedAt())
-                .comment(entity.getComment())
+                .comment(CommentResponseDto.of(entity.getComment()))
                 .build();
     }
 

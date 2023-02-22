@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Builder
@@ -39,5 +42,9 @@ public class CommentResponseDto {
                 .createAt(comment.getCreateAt())
                 .modifiedAt(comment.getModifiedAt())
                 .build();
+    }
+
+    public static List<CommentResponseDto> of(Collection<Comment> entities) {
+        return entities.stream().map(CommentResponseDto::of).collect(Collectors.toList());
     }
 }

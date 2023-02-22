@@ -1,6 +1,7 @@
 package com.sparta.springthreeproject.board.dto;
 
 import com.sparta.springthreeproject.board.entity.Board;
+import com.sparta.springthreeproject.comment.dto.CommentResponseDto;
 import com.sparta.springthreeproject.comment.entity.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,7 +24,7 @@ public class BoardResponseDto {
 
     private String content;
 
-    private List<Comment> comment;
+    private List<CommentResponseDto> comment;
 
     private Long totalLike;
 
@@ -36,7 +37,7 @@ public class BoardResponseDto {
         this.title = entity.getTitle();
         this.userName = entity.getUserName();
         this.content = entity.getContent();
-        this.comment = entity.getComment();
+        this.comment = CommentResponseDto.of(entity.getComment());
         this.createdAt = entity.getCreateAt();
         this.modifiedAt = entity.getModifiedAt();
         this.totalLike = entity.getTotalLike();
@@ -45,7 +46,7 @@ public class BoardResponseDto {
     public BoardResponseDto(Board board, List<Comment> comments) {
         this.title = board.getTitle();
         this.userName = board.getUserName();
-        this.comment = comments;
+        this.comment = CommentResponseDto.of(comments);
         this.content = board.getContent();
         this.createdAt = board.getCreateAt();
         this.modifiedAt = board.getModifiedAt();
@@ -57,7 +58,7 @@ public class BoardResponseDto {
     public BoardResponseDto(BoardResponseDto board, List<Comment> comments) {
         this.title = board.getTitle();
         this.userName = board.getUserName();
-        this.comment = comments;
+        this.comment = CommentResponseDto.of(comments);
         this.content = board.getContent();
         this.createdAt = board.getCreatedAt();
         this.modifiedAt = board.getModifiedAt();

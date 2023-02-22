@@ -35,7 +35,7 @@ public class Board extends TimeStamped {
     @JoinColumn(name = "USER_ID")
     private Users user;
 
-    @OneToMany(mappedBy = "board", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
     private List<Comment> comment = new ArrayList<>();
 
     private Long totalLike = 0L;
