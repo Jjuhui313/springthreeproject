@@ -4,9 +4,7 @@ import com.sparta.springthreeproject.board.dto.BoardRequestDto;
 import com.sparta.springthreeproject.comment.entity.Comment;
 import com.sparta.springthreeproject.user.entity.Users;
 import com.sparta.springthreeproject.util.TimeStamped;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -14,7 +12,9 @@ import java.util.List;
 
 @Entity
 @Getter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Board extends TimeStamped {
     @Id @Column(name = "BOARD_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,6 +27,9 @@ public class Board extends TimeStamped {
     private String content;
 
     private Boolean isDeleted;
+
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
+    private List<BoardLike> like;
 
     @ManyToOne
     @JoinColumn(name = "USER_ID")

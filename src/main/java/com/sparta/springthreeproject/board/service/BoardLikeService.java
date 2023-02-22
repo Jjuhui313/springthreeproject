@@ -1,5 +1,6 @@
 package com.sparta.springthreeproject.board.service;
 
+import com.sparta.springthreeproject.board.dto.BoardLikeDto;
 import com.sparta.springthreeproject.board.entity.Board;
 import com.sparta.springthreeproject.board.entity.BoardLike;
 import com.sparta.springthreeproject.board.repository.BoardLikeRepository;
@@ -18,22 +19,54 @@ import static com.sparta.springthreeproject.exception.message.ExceptionMessage.*
 public class BoardLikeService {
     private final BoardLikeRepository boardLikeRepository;
     private final BoardRepository boardRepository;
-//    private final UserRepository userRepository;
+
+    private final UserRepository userRepository;
 
     @Transactional
-    public boolean boardLike(Long id, Users user) {
-        Optional<BoardLike> boardLike = boardLikeRepository.findByBoard_IdAndUsers_Id(id, user.getId());
+    public BoardLikeDto boardLike(Long id, Users user) {
+        Users users = userRepository.findById(user.getId()).orElseThrow(
+                () -> new IllegalArgumentException(COULD_NOT_FOUND_USER.getMessage())
+        );
+        Board board = boardRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException(BOARD_DOES_NOT_EXIEST.getMessage())
+        );
+        BoardLike like = BoardLike.builder()
+                .board(board)
+                .users(users)
+                .build();
 
-        if (boardLike.isEmpty()) {
-            Board board = boardRepository.findById(id).orElseThrow(
-                    () -> new IllegalArgumentException(BOARD_DOES_NOT_EXIEST.getMessage())
-            );
-            boardLikeRepository.save(new BoardLike(board, user));
-            return true;
+        if(boardLikeRepository.findByBoard_IdAndUsers_Id(board.getId(), users.getId()).orElse(null) == null) {
+            boardLikeRepository.save(like);
+            Long cnt = boardLikeRepository.countAllByBoardId(board.getId());
+            return BoardLikeDto.builder()
+                    .likeBool(true)
+                    .likeCnt(cnt)
+                    .build();
+        } else {
+            boardLikeRepository.deleteByBoard_IdAndUsers_id(board.getId(), user.getId());
+            Long cnt = boardLikeRepository.countAllByBoardId(board.getId());
+            return BoardLikeDto.builder()
+                    .likeBool(false)
+                    .likeCnt(cnt)
+                    .build();
         }
-        BoardLike like = boardLike.get();
-        return like.likeLike();
     }
+
+
+
+//    public boolean boardLike(Long id, Users user) {
+//        Optional<BoardLike> boardLike = boardLikeRepository.findByBoard_IdAndUsers_Id(id, user.getId());
+//
+//        if (boardLike.isEmpty()) {
+//            Board board = boardRepository.findById(id).orElseThrow(
+//                    () -> new IllegalArgumentException(BOARD_DOES_NOT_EXIEST.getMessage())
+//            );
+//            boardLikeRepository.save(new BoardLike(board, user));
+//            return true;
+//        }
+//        BoardLike like = boardLike.get();
+//        return like.likeLike();
+//    }
 
 //    @Transactional
 //    public void insertLike(Long id, Users user) {

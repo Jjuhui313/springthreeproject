@@ -93,17 +93,17 @@ public class BoardController {
 
     }
 
-    @PostMapping("/board/{id}/like")
-    public ResponseEntity<Object> likeBoard(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        boolean isLiked = boardLikeService.boardLike(id, userDetails.getUser());
-        ExcepMsg msg = null;
-
-        if(isLiked) {
-            msg = new ExcepMsg("좋아요", OK.value());
-        }
-        msg = new ExcepMsg("좋아요 취소", OK.value());
-        return new ResponseEntity<>(msg, OK);
-    }
+//    @PostMapping("/board/{id}/like")
+//    public ResponseEntity<Object> likeBoard(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+//        boolean isLiked = boardLikeService.boardLike(id, userDetails.getUser());
+//        ExcepMsg msg = null;
+//
+//        if(isLiked) {
+//            msg = new ExcepMsg("좋아요", OK.value());
+//        }
+//        msg = new ExcepMsg("좋아요 취소", OK.value());
+//        return new ResponseEntity<>(msg, OK);
+//    }
 //    @PostMapping("/board/{id}/like")
 //    public ResponseEntity<Object> insertLikeBoard(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 //        boardLikeService.insertLike(id, userDetails.getUser());
