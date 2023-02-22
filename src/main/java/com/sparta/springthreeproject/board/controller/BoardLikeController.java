@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class BoardLikeController {
     private final BoardLikeService boardLikeService;
 
-    @PostMapping("/like/{id}")
-    public BoardLikeDto pressLike(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return boardLikeService.boardLike(id, userDetails.getUser());
+    @PostMapping("board/{b-id}/like")
+    public BoardLikeDto pressBoardLike(@PathVariable(name = "b-id") Long bId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return boardLikeService.boardLike(bId, userDetails.getUser());
     }
 }

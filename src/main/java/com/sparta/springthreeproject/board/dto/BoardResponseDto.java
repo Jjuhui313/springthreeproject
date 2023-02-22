@@ -25,6 +25,8 @@ public class BoardResponseDto {
 
     private List<Comment> comment;
 
+    private Long totalLike;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime modifiedAt;
@@ -37,6 +39,7 @@ public class BoardResponseDto {
         this.comment = entity.getComment();
         this.createdAt = entity.getCreateAt();
         this.modifiedAt = entity.getModifiedAt();
+        this.totalLike = entity.getTotalLike();
     }
 
     public BoardResponseDto(Board board, List<Comment> comments) {
@@ -46,6 +49,7 @@ public class BoardResponseDto {
         this.content = board.getContent();
         this.createdAt = board.getCreateAt();
         this.modifiedAt = board.getModifiedAt();
+        this.totalLike = board.getTotalLike();
 
     }
 
@@ -57,6 +61,7 @@ public class BoardResponseDto {
         this.content = board.getContent();
         this.createdAt = board.getCreatedAt();
         this.modifiedAt = board.getModifiedAt();
+        this.totalLike = board.getTotalLike();
     }
 
     public static BoardResponseDto of(Board board) {

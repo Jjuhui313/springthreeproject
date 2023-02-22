@@ -51,7 +51,7 @@ public class BoardController {
     }
 
     @GetMapping("/board/{id}")
-    public BoardResponseDto getPosts(@PathVariable Long id) {
+    public BoardResponseDto getPost(@PathVariable Long id) {
         List<Comment> comments = commentService.getComment(id);
         BoardResponseDto board = boardService.findById(id);
 

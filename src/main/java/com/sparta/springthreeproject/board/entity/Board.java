@@ -38,14 +38,13 @@ public class Board extends TimeStamped {
     @OneToMany(mappedBy = "board", fetch = FetchType.EAGER)
     private List<Comment> comment = new ArrayList<>();
 
-    private Integer totalLike;
+    private Long totalLike = 0L;
 
     public Board(BoardRequestDto requestDto, Users user) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
         this.user = user;
         this.isDeleted = false;
-        this.totalLike = 0;
     }
 
 
@@ -64,12 +63,12 @@ public class Board extends TimeStamped {
         this.isDeleted = deleted;
     }
 
-    protected void like() {
-        this.totalLike += 1;
-    }
-
-    protected  void disLike() {
-        this.totalLike -= 1;
-    }
+//    protected void like() {
+//        this.totalLike += 1;
+//    }
+//
+//    protected  void disLike() {
+//        this.totalLike -= 1;
+//    }
 
 }

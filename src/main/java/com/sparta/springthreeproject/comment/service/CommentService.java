@@ -5,6 +5,7 @@ import com.sparta.springthreeproject.board.repository.BoardRepository;
 import com.sparta.springthreeproject.comment.dto.CommentRequestDto;
 import com.sparta.springthreeproject.comment.entity.Comment;
 import com.sparta.springthreeproject.comment.dto.CommentResponseDto;
+import com.sparta.springthreeproject.comment.repository.CommentLikeRepository;
 import com.sparta.springthreeproject.comment.repository.CommentRepository;
 import com.sparta.springthreeproject.exception.dto.ExcepMsg;
 import com.sparta.springthreeproject.user.entity.UserRoleEnum;
@@ -14,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,6 +29,8 @@ import static com.sparta.springthreeproject.exception.message.ExceptionMessage.*
 public class CommentService {
 
     private final CommentRepository commentRepository;
+
+    private final CommentLikeRepository commentLikeRepository;
     private final BoardRepository boardRepository;
 
     private boolean hasAuthority(Users users, Comment comment) {
@@ -37,7 +41,7 @@ public class CommentService {
         Board board = boardRepository.findById(bId).orElseThrow(
                 () -> new IllegalArgumentException(BOARD_DOES_NOT_EXIEST.getMessage())
         );
-        Comment comment = new Comment(requestDto, board, user.getUserName());
+        Comment comment = new Comment(requestDto, board, user);
         commentRepository.save(comment);
 
         return CommentResponseDto.of(comment);
@@ -45,6 +49,20 @@ public class CommentService {
 
     public List<Comment> getComment(Long id) {
         List<Comment> comments = commentRepository.findByBoard_IdOrderByCreateAtDesc(id);
+        List<CommentResponseDto> responseDtos = new ArrayList<>();
+        for(Comment comment : comments) {
+            Long likeTotal = commentLikeRepository.countAllByComment_Id(comment.getId());
+            CommentResponseDto responseDto = CommentResponseDto.builder()
+                    .content(comment.getContent())
+                    .userName(comment.getUserName())
+                    .createAt(comment.getCreateAt())
+                    .modifiedAt(comment.getModifiedAt())
+                    .totalLike(likeTotal)
+                    .build();
+            responseDtos.add(responseDto);
+        }
+
+//        return responseDtos.stream().map(responseDtos1 -> new Comment(responseDtos1, ));
         return comments.stream().filter(comment -> !comment.getIsDeleted()).collect(Collectors.toList());
     }
 

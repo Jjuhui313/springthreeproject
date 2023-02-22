@@ -63,16 +63,16 @@ public class CommentController {
         return new ResponseEntity<>(msg, OK);
     }
 
-    @PostMapping("/board/{b-id}/comment/{c-id}/like")
-    public ResponseEntity<Object> likeComment(@PathVariable(name = "c-id") Long cId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        boolean isLike = commentLikeService.commentLike(cId, userDetails.getUser());
-
-        if(isLike) {
-            ExcepMsg msg = new ExcepMsg("좋아요", OK.value());
-            return new ResponseEntity<>(msg, OK);
-        }
-        ExcepMsg msg = new ExcepMsg("좋아요 취소", OK.value());
-        return new ResponseEntity<>(msg, OK);
-
-    }
+//    @PostMapping("/board/{b-id}/comment/{c-id}/like")
+//    public ResponseEntity<Object> likeComment(@PathVariable(name = "c-id") Long cId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+//        boolean isLike = commentLikeService.commentLike(cId, userDetails.getUser());
+//
+//        if(isLike) {
+//            ExcepMsg msg = new ExcepMsg("좋아요", OK.value());
+//            return new ResponseEntity<>(msg, OK);
+//        }
+//        ExcepMsg msg = new ExcepMsg("좋아요 취소", OK.value());
+//        return new ResponseEntity<>(msg, OK);
+//
+//    }
 }

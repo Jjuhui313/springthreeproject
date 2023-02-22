@@ -5,15 +5,16 @@ import com.sparta.springthreeproject.board.entity.Board;
 import com.sparta.springthreeproject.comment.dto.CommentRequestDto;
 import com.sparta.springthreeproject.user.entity.Users;
 import com.sparta.springthreeproject.util.TimeStamped;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Comment extends TimeStamped {
 
     @Id
@@ -32,14 +33,20 @@ public class Comment extends TimeStamped {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Board board;
 
-    private Integer totalLike;
+    @ManyToOne
+    @JoinColumn(name = "USER_ID")
+    private Users user;
 
-    public Comment(CommentRequestDto commentRequestDto, Board board, String userName) {
-        this.userName = userName;
+
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE)
+    private List<CommentLike> like;
+    private Long totalLike = 0L;
+
+    public Comment(CommentRequestDto commentRequestDto, Board board, Users users) {
+        this.userName = users.getUserName();
         this.content = commentRequestDto.getContent();
         this.board = board;
         this.isDeleted = false;
-        this.totalLike = 0;
     }
 
 
@@ -53,11 +60,11 @@ public class Comment extends TimeStamped {
         this.isDeleted = true;
     }
 
-    protected void like() {
-        this.totalLike += 1;
-    }
-    protected void disLike() {
-        this.totalLike -= 1;
-    }
+//    protected void like() {
+//        this.totalLike += 1;
+//    }
+//    protected void disLike() {
+//        this.totalLike -= 1;
+//    }
 }
 

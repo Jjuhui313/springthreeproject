@@ -17,6 +17,8 @@ public class CommentResponseDto {
     private String content;
     private String userName;
 
+    private Long totalLike;
+
     private LocalDateTime createAt;
 
     private LocalDateTime modifiedAt;
@@ -26,6 +28,7 @@ public class CommentResponseDto {
         this.userName = entity.getUserName();
         this.createAt = entity.getCreateAt();
         this.modifiedAt = entity.getModifiedAt();
+        this.totalLike = entity.getTotalLike();
     }
 
 

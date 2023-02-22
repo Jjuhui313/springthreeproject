@@ -23,11 +23,11 @@ public class BoardLikeService {
     private final UserRepository userRepository;
 
     @Transactional
-    public BoardLikeDto boardLike(Long id, Users user) {
+    public BoardLikeDto boardLike(Long bId, Users user) {
         Users users = userRepository.findById(user.getId()).orElseThrow(
                 () -> new IllegalArgumentException(COULD_NOT_FOUND_USER.getMessage())
         );
-        Board board = boardRepository.findById(id).orElseThrow(
+        Board board = boardRepository.findById(bId).orElseThrow(
                 () -> new IllegalArgumentException(BOARD_DOES_NOT_EXIEST.getMessage())
         );
         BoardLike like = BoardLike.builder()
@@ -35,16 +35,17 @@ public class BoardLikeService {
                 .users(users)
                 .build();
 
+
         if(boardLikeRepository.findByBoard_IdAndUsers_Id(board.getId(), users.getId()).orElse(null) == null) {
             boardLikeRepository.save(like);
-            Long cnt = boardLikeRepository.countAllByBoardId(board.getId());
+            Long cnt = boardLikeRepository.countAllByBoard_Id(board.getId());
             return BoardLikeDto.builder()
                     .likeBool(true)
                     .likeCnt(cnt)
                     .build();
         } else {
             boardLikeRepository.deleteByBoard_IdAndUsers_id(board.getId(), user.getId());
-            Long cnt = boardLikeRepository.countAllByBoardId(board.getId());
+            Long cnt = boardLikeRepository.countAllByBoard_Id(board.getId());
             return BoardLikeDto.builder()
                     .likeBool(false)
                     .likeCnt(cnt)
