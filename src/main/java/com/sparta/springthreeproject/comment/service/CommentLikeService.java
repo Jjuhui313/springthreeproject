@@ -1,7 +1,5 @@
 package com.sparta.springthreeproject.comment.service;
 
-import com.sparta.springthreeproject.board.entity.Board;
-import com.sparta.springthreeproject.board.repository.BoardRepository;
 import com.sparta.springthreeproject.comment.dto.CommentLikeDto;
 import com.sparta.springthreeproject.comment.entity.Comment;
 import com.sparta.springthreeproject.comment.entity.CommentLike;
@@ -44,17 +42,19 @@ public class CommentLikeService {
 
         if(commentLikeRepository.findByComment_IdAndUsers_id(comment.getId(),user.getId()).orElse(null) == null) {
             commentLikeRepository.save(like);
-            Long cnt = commentLikeRepository.countAllByComment_Id(comment.getId());
+//            Long cnt = commentLikeRepository.countAllByComment_Id(comment.getId()) + 1;
+            comment.like();
             return CommentLikeDto.builder()
                     .likeBool(true)
-                    .likeCnt(cnt)
+                    .likeCnt(comment.getTotalLike())
                     .build();
         } else {
             commentLikeRepository.deleteByComment_IdAndUsers_Id(comment.getId(), user.getId());
-            Long cnt = commentLikeRepository.countAllByComment_Id(comment.getId());
+//            Long cnt = commentLikeRepository.countAllByComment_Id(comment.getId()) - 1;
+            comment.disLike();
             return CommentLikeDto.builder()
                     .likeBool(false)
-                    .likeCnt(cnt)
+                    .likeCnt(comment.getTotalLike())
                     .build();
         }
 

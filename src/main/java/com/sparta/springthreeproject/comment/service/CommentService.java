@@ -47,6 +47,8 @@ public class CommentService {
         return CommentResponseDto.of(comment);
     }
 
+
+
     public List<Comment> getComment(Long id) {
         List<Comment> comments = commentRepository.findByBoard_IdOrderByCreateAtDesc(id);
         List<CommentResponseDto> responseDtos = new ArrayList<>();

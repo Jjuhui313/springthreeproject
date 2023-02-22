@@ -39,13 +39,14 @@ public class Comment extends TimeStamped {
     private Users user;
 
 
-    @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "comment",fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<CommentLike> like;
     private Long totalLike = 0L;
 
     public Comment(CommentRequestDto commentRequestDto, Board board, Users users) {
         this.userName = users.getUserName();
         this.content = commentRequestDto.getContent();
+        this.user = users;
         this.board = board;
         this.isDeleted = false;
     }
@@ -61,11 +62,11 @@ public class Comment extends TimeStamped {
         this.isDeleted = true;
     }
 
-//    protected void like() {
-//        this.totalLike += 1;
-//    }
-//    protected void disLike() {
-//        this.totalLike -= 1;
-//    }
+    public void like() {
+        this.totalLike += 1;
+    }
+    public void disLike() {
+        this.totalLike -= 1;
+    }
 }
 
